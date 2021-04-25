@@ -16,6 +16,11 @@
   },
   {
     "Sourcefile": "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\build\\sketch\\DBML.ino.cpp",
+    "Include": "SAMDTimerInterrupt.h",
+    "Includepath": "C:\\Users\\Administrator\\Documents\\Arduino\\libraries\\SAMD_TimerInterrupt\\src"
+  },
+  {
+    "Sourcefile": "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\build\\sketch\\DBML.ino.cpp",
     "Include": "",
     "Includepath": null
   },

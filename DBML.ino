@@ -1,6 +1,13 @@
-#pragma message "DBML(Arduino-Demo) version 1.000.000"
+#pragma message "DBML(Arduino-Demo) version 1.001.000"
 
 #include <FastLED.h>
+
+#define USE_INTERRUPT
+
+#ifdef USE_INTERRUPT
+#include <SAMDTimerInterrupt.h>
+#include <SAMD_ISR_Timer.h>
+#endif
 
 #define NUM_STRIPS 3           // 灯条数量
 #define NUM_LEDS_PER_STRIP 40  // 每排灯条所含灯珠数量
@@ -30,6 +37,10 @@ struct {
     enum STATE state;
 } state_controller;  // 全局状态控制器
 
+#ifdef USE_INTERRUPT
+SAMDTimer ITimer(TIMER_TCC);
+#endif
+
 int8_t step = 1;           // 颜色渐变步长
 int16_t db = 0;            // 声强传感器虚拟值
 int8_t mirage_choice = 0;  // 幻彩方案选择变量
@@ -38,6 +49,9 @@ int8_t music_choice = 0;   // 音乐方案选择变量
 CRGB leds[NUM_STRIPS][NUM_LEDS_PER_STRIP];  // 三排灯珠RGB颜色数组
 CRGB leds_target[NUM_STRIPS]
                 [NUM_LEDS_PER_STRIP];  // 三排灯珠RGB变换目标颜色数组
+
+// 系统主定时中断函数
+void DBML_Event();
 
 // 感应开关相关函数
 void Switch_Init();          // 感应开关初始化函数
@@ -59,10 +73,10 @@ void MM_Disco(int16_t db_step = 103);  // 蹦迪模式
 void setup() {
     randomSeed(analogRead(0));  // 采集A0口噪声作为随机种子
 
-    step = 1;           // 颜色渐变步长初始化
-    db = 0;             // 声强传感器虚拟值初始化
-    mirage_choice = 0;  // 幻彩方案选择变量初始化
-    music_choice = 0;   // 音乐方案选择变量初始化
+    step = 1;                     // 颜色渐变步长初始化
+    db = analogRead(VOLUME_PIN);  // 声强传感器虚拟值初始化
+    mirage_choice = 0;            // 幻彩方案选择变量初始化
+    music_choice = 0;             // 音乐方案选择变量初始化
 
     // 台灯状态初始化
     state_controller.switch_counter = 0;
@@ -71,10 +85,25 @@ void setup() {
 
     Switch_Init();
     Strip_Init();
+
+#ifdef USE_INTERRUPT
+    ITimer.attachInterruptInterval(SYSTEM_INTERVAL_MS * 1000, DBML_Event);
+#endif
 }
 
 void loop() {
     db = analogRead(VOLUME_PIN);  // 获取声强传感器值
+#ifndef USE_INTERRUPT
+    DBML_Event();
+    delay(SYSTEM_INTERVAL_MS);
+#endif
+}
+
+/*******************************************************************************
+ *                                系统相关函数 *
+ *******************************************************************************/
+// 系统主定时函数
+void DBML_Event() {
     Switch_State_Update();
 
     switch (state_controller.state) {
@@ -98,8 +127,6 @@ void loop() {
     // Strip_Update();
 
     FastLED.show();
-
-    delay(SYSTEM_INTERVAL_MS)  // 系统延时
 }
 
 /*******************************************************************************

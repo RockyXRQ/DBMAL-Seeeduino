@@ -51,6 +51,7 @@
                 "C:\\Users\\Administrator\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\samd\\1.8.1\\cores\\arduino",
                 "C:\\Users\\Administrator\\AppData\\Local\\Arduino15\\packages\\Seeeduino\\hardware\\samd\\1.8.1\\variants\\XIAO_m0",
                 "C:\\Users\\Administrator\\Documents\\Arduino\\libraries\\FastLED\\src",
+                "C:\\Users\\Administrator\\Documents\\Arduino\\libraries\\SAMD_TimerInterrupt\\src",
                 "c:\\users\\administrator\\appdata\\local\\arduino15\\packages\\seeeduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include\\c++\\7.2.1",
                 "c:\\users\\administrator\\appdata\\local\\arduino15\\packages\\seeeduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include\\c++\\7.2.1\\arm-none-eabi",
                 "c:\\users\\administrator\\appdata\\local\\arduino15\\packages\\seeeduino\\tools\\arm-none-eabi-gcc\\7-2017q4\\arm-none-eabi\\include\\c++\\7.2.1\\backward",

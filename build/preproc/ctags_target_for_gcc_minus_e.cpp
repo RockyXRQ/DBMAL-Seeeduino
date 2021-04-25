@@ -1,12 +1,18 @@
 # 1 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
         
 # 1 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
-#pragma message "DBML(Arduino-Demo) version 0.001.001"
+#pragma message "DBML(Arduino-Demo) version 1.001.000"
 # 1 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 
 
 # 4 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino" 2
-# 19 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+
+
+
+
+# 9 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino" 2
+# 10 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino" 2
+# 26 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 // 返回限流后的值
 
 
@@ -21,6 +27,10 @@ struct {
     enum STATE state;
 } state_controller; // 全局状态控制器
 
+
+SAMDTimer ITimer(TIMER_TCC);
+
+
 int8_t step = 1; // 颜色渐变步长
 int16_t db = 0; // 声强传感器虚拟值
 int8_t mirage_choice = 0; // 幻彩方案选择变量
@@ -29,6 +39,9 @@ int8_t music_choice = 0; // 音乐方案选择变量
 CRGB leds[3 /* 灯条数量*/][40 /* 每排灯条所含灯珠数量*/]; // 三排灯珠RGB颜色数组
 CRGB leds_target[3 /* 灯条数量*/]
                 [40 /* 每排灯条所含灯珠数量*/]; // 三排灯珠RGB变换目标颜色数组
+
+// 系统主定时中断函数
+void DBML_Event();
 
 // 感应开关相关函数
 void Switch_Init(); // 感应开关初始化函数
@@ -50,6 +63,11 @@ void MM_Disco(int16_t db_step = 103); // 蹦迪模式
 void setup() {
     randomSeed(analogRead(0)); // 采集A0口噪声作为随机种子
 
+    step = 1; // 颜色渐变步长初始化
+    db = analogRead(9 /* 声强传感器对应虚拟端*/); // 声强传感器虚拟值初始化
+    mirage_choice = 0; // 幻彩方案选择变量初始化
+    music_choice = 0; // 音乐方案选择变量初始化
+
     // 台灯状态初始化
     state_controller.switch_counter = 0;
     state_controller.switch_state = RELEASE;
@@ -57,10 +75,28 @@ void setup() {
 
     Switch_Init();
     Strip_Init();
+
+
+    ITimer.attachInterruptInterval(8 /* 系统频率在125hz左右*/ * 1000, DBML_Event);
+
 }
 
 void loop() {
-    db = analogRead(9 /* 声强传感器对应虚拟端*/);
+    db = analogRead(9 /* 声强传感器对应虚拟端*/); // 获取声强传感器值
+
+
+
+
+}
+
+/*******************************************************************************
+
+ *                                系统相关函数 *
+
+ *******************************************************************************/
+# 105 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+// 系统主定时函数
+void DBML_Event() {
     Switch_State_Update();
 
     switch (state_controller.state) {
@@ -80,7 +116,7 @@ void loop() {
             Strip_Music(music_choice);
             break;
     }
-    Strip_Update_Fade(step);
+    Strip_Update_Fade(step); // 台灯颜色渐变式刷新
     // Strip_Update();
 
     FastLED.show();
@@ -91,7 +127,7 @@ void loop() {
  *                                感应开关相关函数 *
 
  *******************************************************************************/
-# 101 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+# 135 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 // 感应开关初始化函数
 void Switch_Init() { pinMode(10 /* 感应开关对应数字端*/, (0x0)); }
 
@@ -119,6 +155,7 @@ void Switch_State_Update() {
         if (state_controller.switch_counter >= 250 /* 按住超过2秒视为长按*/) {
             state_controller.state = CLOSE;
         }
+
         state_controller.switch_counter = 0;
     }
 }
@@ -128,7 +165,7 @@ void Switch_State_Update() {
  *                                 灯条相关函数 *
 
  *******************************************************************************/
-# 135 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+# 170 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 // 灯条初始化函数
 void Strip_Init() {
     FastLED.addLeds<WS2812, 6 /* 左排灯条对应数字端*/, GRB>(leds[0], 40 /* 每排灯条所含灯珠数量*/);
@@ -218,7 +255,7 @@ void Strip_Music(int8_t mm_choice, int16_t db_step) {
  *                               幻彩&音乐相关函数 *
 
  *******************************************************************************/
-# 222 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+# 257 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 // 夕阳西下模式
 void MM_Dusk() {
     // 夕阳西下模式下, HSV模式下颜色变换
