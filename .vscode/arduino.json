@@ -1,0 +1,7 @@
+{
+    "configuration": "usbstack=arduino,debug=off",
+    "board": "Seeeduino:samd:seeed_XIAO_m0",
+    "output": "./build",
+    "sketch": "DBML.ino",
+    "programmer": "Seeeduino:adafruit_jlink"
+}
