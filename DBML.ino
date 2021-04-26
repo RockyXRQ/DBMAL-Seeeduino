@@ -3,10 +3,10 @@
 #include <FastLED.h>
 
 #define USE_INTERRUPT
+#define DEBUG_MODE 1
 
 #ifdef USE_INTERRUPT
 #include <SAMDTimerInterrupt.h>
-#include <SAMD_ISR_Timer.h>
 #endif
 
 #define NUM_STRIPS 3           // 灯条数量
@@ -71,8 +71,6 @@ void MM_Dusk();                        // 夕阳西下模式
 void MM_Disco(int16_t db_step = 103);  // 蹦迪模式
 
 void setup() {
-    randomSeed(analogRead(0));  // 采集A0口噪声作为随机种子
-
     step = 1;                     // 颜色渐变步长初始化
     db = analogRead(VOLUME_PIN);  // 声强传感器虚拟值初始化
     mirage_choice = 0;            // 幻彩方案选择变量初始化
@@ -89,6 +87,11 @@ void setup() {
 #ifdef USE_INTERRUPT
     ITimer.attachInterruptInterval(SYSTEM_INTERVAL_MS * 1000, DBML_Event);
 #endif
+#if DEBUG_MODE
+    Serial.begin(115200);
+    while (Serial)
+        ;
+#endif
 }
 
 void loop() {
@@ -96,6 +99,10 @@ void loop() {
 #ifndef USE_INTERRUPT
     DBML_Event();
     delay(SYSTEM_INTERVAL_MS);
+#endif
+#if DEBUG_MODE
+    Serial.print("Voice: ");
+    Serial.println(db);
 #endif
 }
 

@@ -5,10 +5,10 @@
 #include <FastLED.h>
 
 #define USE_INTERRUPT
+#define DEBUG_MODE 1
 
 #ifdef USE_INTERRUPT
 #include <SAMDTimerInterrupt.h>
-#include <SAMD_ISR_Timer.h>
 #endif
 
 #define NUM_STRIPS 3           // 灯条数量
@@ -74,22 +74,20 @@ void MM_Disco(int16_t db_step = 103);  // 蹦迪模式
 
 #line 73 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 void setup();
-#line 94 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+#line 97 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 void loop();
-#line 233 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+#line 240 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 void Strip_Mirage(int8_t mm_choice);
-#line 246 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+#line 253 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 void Strip_Music(int8_t mm_choice, int16_t db_step);
-#line 278 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
+#line 285 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 void MM_Disco(int16_t db_step);
 #line 73 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBML\\DBML.ino"
 void setup() {
-    randomSeed(analogRead(0));  // 采集A0口噪声作为随机种子
-
     step = 1;                     // 颜色渐变步长初始化
     db = analogRead(VOLUME_PIN);  // 声强传感器虚拟值初始化
     mirage_choice = 0;            // 幻彩方案选择变量初始化
-    music_choice = 0;             // 音乐方案选择变量初始化
+    music_choice = 0;  `           // 音乐方案选择变量初始化
 
     // 台灯状态初始化
     state_controller.switch_counter = 0;
@@ -102,6 +100,11 @@ void setup() {
 #ifdef USE_INTERRUPT
     ITimer.attachInterruptInterval(SYSTEM_INTERVAL_MS * 1000, DBML_Event);
 #endif
+#if DEBUG_MODE
+    Serial.begin(115200);
+    while (Serial)
+        ;
+#endif
 }
 
 void loop() {
@@ -109,6 +112,10 @@ void loop() {
 #ifndef USE_INTERRUPT
     DBML_Event();
     delay(SYSTEM_INTERVAL_MS);
+#endif
+#if DEBUG_MODE
+    Serial.print("Voice: ");
+    Serial.println(db);
 #endif
 }
 
