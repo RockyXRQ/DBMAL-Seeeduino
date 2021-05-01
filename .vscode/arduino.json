@@ -2,6 +2,6 @@
     "configuration": "usbstack=arduino,debug=off",
     "board": "Seeeduino:samd:seeed_XIAO_m0",
     "output": "./build",
-    "sketch": "DBML.ino",
+    "sketch": "DBMAL.ino",
     "programmer": "Seeeduino:adafruit_jlink"
 }

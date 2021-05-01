@@ -65,7 +65,7 @@
             "cStandard": "c11",
             "cppStandard": "c++14",
             "defines": [
-                "__SKETCH_NAME__=\"\"\"DBML.ino\"\"\"",
+                "__SKETCH_NAME__=\"\"\"DBMAL.ino\"\"\"",
                 "F_CPU=48000000L",
                 "ARDUINO=10813",
                 "ARDUINO_SEEED_XIAO_M0",
