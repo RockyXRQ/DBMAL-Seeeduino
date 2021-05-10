@@ -7,7 +7,7 @@
             "compilerArgs": [],
             "intelliSenseMode": "msvc-x64",
             "includePath": [
-                "${workspaceFolder}/**",
+                "${workspaceFolder}\\**",
                 "C:\\Program Files (x86)\\Arduino\\hardware\\arduino\\avr\\libraries\\**",
                 "C:\\Program Files (x86)\\Arduino\\libraries",
                 "C:\\Users\\Administrator\\Documents\\Arduino\\libraries\\**"
