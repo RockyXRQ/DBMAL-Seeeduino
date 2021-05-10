@@ -1,10 +1,10 @@
 #ifndef __STATER_H
 #define __STATER_H
 
+enum SYS_STATE { CLOSE = 0, SOLID, MIRAGE, MUSIC };  // 系统状态枚举量
+
 class Stater {
    public:
-    enum SYS_STATE { CLOSE = 0, SOLID, MIRAGE, MUSIC };  // 系统状态枚举量
-
     /**
      * @brief 触摸开关状态器构造函数
      * @param pin 触摸开关输入引脚

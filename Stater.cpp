@@ -2,6 +2,8 @@
 
 #include <Arduino.h>
 
+#include "config.h"
+
 /**
  * @brief 触摸开关状态器构造函数
  * @param pin 触摸开关输入引脚

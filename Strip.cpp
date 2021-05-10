@@ -141,4 +141,4 @@ void Strip::SetMirageChoice(int mirage_choice) {
  * @brief 选择音乐方案
  * @param music_choice 音乐方案编号
  */
-void Strip::SetMirageChoice(int music_choice) { m_music_choice = music_choice; }
+void Strip::SetMusicChoice(int music_choice) { m_music_choice = music_choice; }

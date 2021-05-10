@@ -11,17 +11,21 @@
 #include "Strip.h"
 #include "config.h"
 
-SAMDTimer m_timer_tcc{TIMER_TCC};
+SAMDTimer m_timer_tcc{TIMER_TCC};  // SAMD21定时器句柄
 Stater m_stater{SWITCH_PIN, LONG_HOLDING_COUNTER_LIMIT};
 Strip m_strip;
 
-#line 16 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
+/**
+ * @brief DBMAL定时器执行函数
+ * @note 检查更新系统状态 -> 根据系统状态执行对应颜色方案 -> 更新灯珠颜色
+ */
+#line 20 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
 static void DBMAL_Event();
-#line 40 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
+#line 46 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
 void setup();
-#line 48 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
+#line 55 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
 void loop();
-#line 16 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
+#line 20 "c:\\Personal\\University\\Code\\C_CPP\\Arduino_IDE\\DBMAL\\DBMAL.ino"
 static void DBMAL_Event() {
     m_stater.StateUpdate();
 
@@ -42,11 +46,14 @@ static void DBMAL_Event() {
             m_strip.Music();
             break;
     }
+    m_strip.UpdateFade();
+    // m_strip.Update();
 
     FastLED.show();
 }
 
 void setup() {
+    // 增加定时器中断执行函数, 每8ms执行一次
     m_timer_tcc.attachInterruptInterval(SYSTEM_INTERVAL_MS * 1000, DBMAL_Event);
 
 #if DEBUG_MODE

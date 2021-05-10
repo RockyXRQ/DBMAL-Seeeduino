@@ -3,8 +3,6 @@
 
 #include <FastLED.h>
 
-#define DEBUG_MODE 1
-
 #define NUM_STRIPS 2           // 灯条数量
 #define NUM_LEDS_PER_STRIP 62  // 每排灯条所含灯珠数量
 
@@ -15,9 +13,9 @@
 #define SWITCH_PIN 10    // 感应开关对应数字端
 
 #define TOP_COLOR_GROUP_NUM 8  // 颜色集群最大数量
-#define VOICE_UP_DB 315
-#define VOICE_DOWN_DB 250
-#define VOICE_WIDTH_DB ((VOICE_UP_DB) - (VOICE_DOWN_DB))
+#define VOICE_UP_DB 315        // 环境声强上限
+#define VOICE_DOWN_DB 250      // 环境声强下限
+#define VOICE_WIDTH_DB ((VOICE_UP_DB) - (VOICE_DOWN_DB))  // 环境声强变化宽度
 
 #define SYSTEM_INTERVAL_MS 8            // 系统频率在125hz左右
 #define LONG_HOLDING_COUNTER_LIMIT 250  // 按住超过2秒视为长按
